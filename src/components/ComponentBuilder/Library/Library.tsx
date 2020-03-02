@@ -1,12 +1,12 @@
 import React from 'react';
 import './Library.scss';
-import { ComponentWrapperProps, ComponentWrapper } from './ComponentWrapper/ComponentWrapper';
+import { ComponentWrapper } from './ComponentWrapper/ComponentWrapper';
 
-export default function Library({ components }: { components: ComponentWrapperProps[] }) {
+export default function Library({ components }) {
 
     return (
         <div className="Library">
-            {components.map(e =>
+            {Object.keys(components).map(e =>
                 <ComponentWrapper>{e}</ComponentWrapper>)
             }
         </div>

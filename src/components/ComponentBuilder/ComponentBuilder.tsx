@@ -3,18 +3,29 @@ import Library from './Library/Library';
 import Sandbox from './Sandbox/Sandbox';
 import Settings from './Settings/Settings';
 import { Button, Card, Badge } from '@material-ui/core';
-import { ComponentWrapperProps } from './Library/ComponentWrapper/ComponentWrapper';
 
 export default function ComponentBuilder() {
-    const components: ComponentWrapperProps[] = [
-        { name: 'Button Component', component: Button },
-        { name: 'Card', component: Card },
-        { name: 'Badge', component: Badge }
-    ];
+    const components = {
+        'Button': {
+            component: Button,
+            props: [],
+            children: ['Button Component']
+        },
+        'Card': {
+            component: Card,
+            props: [],
+            children: ['Card Component']
+        },
+        'Badge': {
+            component: Badge,
+            props: [],
+            children: ['Badge Component']
+        }
+    };
     return (
         <div className="ComponentBuilder">
             <Library components={components} />
-            <Sandbox />
+            <Sandbox components={components} />
             <Settings />
         </div>
     )

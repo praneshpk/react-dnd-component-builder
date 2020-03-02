@@ -1,20 +1,14 @@
 import React, { useRef } from 'react';
 
-export interface ComponentWrapperProps {
-    name: string,
-    component: any,
-    props?: any
-}
-
-export function ComponentWrapper({ children }: { children: ComponentWrapperProps }) {
+export function ComponentWrapper({ children }) {
     function drag(evt) {
-        console.log('dragging ' + children.name);
+        console.log('dragging ' + children);
         evt.dataTransfer.setData("component", children);
     }
 
     return (
-        <div className="ComponentWrapper" draggable="true" onDrag={drag}>
-            {children.name}
+        <div className="ComponentWrapper" draggable="true" onDragStart={drag}>
+            {children}
         </div>
     )
 }
