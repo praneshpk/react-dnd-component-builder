@@ -1,0 +1,9 @@
+.Library {
+    z-index: 2;
+    display: flex;
+    position: fixed;
+    background: red;
+    height: 100%;
+    flex-direction: column;
+    padding: 50px;
+}

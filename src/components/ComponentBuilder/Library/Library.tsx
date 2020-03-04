@@ -2,12 +2,17 @@ import React from 'react';
 import './Library.scss';
 import { ComponentWrapper } from './ComponentWrapper/ComponentWrapper';
 
-export default function Library({ components }) {
+export const generateKey = prefix => `${prefix}_${Date.now()}`;
 
+export default function Library({ components }) {
+    function drop(evt) {
+        evt.preventDefault();
+        console.log(evt);
+    }
     return (
-        <div className="Library">
+        <div className="Library" onDrop={drop}>
             {Object.keys(components).map(e =>
-                <ComponentWrapper>{e}</ComponentWrapper>)
+                <ComponentWrapper key={generateKey(e)}>{e}</ComponentWrapper>)
             }
         </div>
     )

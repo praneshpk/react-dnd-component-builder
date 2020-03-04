@@ -1,0 +1,9 @@
+.Settings {
+    background: lightblue;
+    height: 180px;
+    flex-grow: 1;
+    .content {
+        text-transform: uppercase;
+        padding: 1rem 10rem;
+    }
+}

@@ -1,4 +1,14 @@
 .Sandbox {
+    // position: absolute;
+    z-index: 1;
     background: beige;
-    padding: 200px;
+    height: 600px;
+    // width: 100%;
+    .content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1rem 10rem;
+    }
 }
