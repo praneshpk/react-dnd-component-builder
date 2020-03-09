@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { createProperties, exportToJSON } from './Util';
 import './Settings.scss';
 
 export default function Settings({
     components, sandbox, setSandbox, addToSandbox, focus, setFocus
 }) {
     const [content, setContent] = useState(<h2>Settings panel</h2>);
+    const [json, setJson] = useState('Click export to see JSON code');
 
-    function drop(evt) {
+    function drop() {
         const { [focus]: value, ...newSandbox } = sandbox;
         setSandbox(newSandbox);
         setContent(<h2>Settings panel</h2>);
@@ -25,44 +27,22 @@ export default function Settings({
         const props = sandbox[focus].props.children.props;
         const { id } = props;
         const key = id.split('_')[0];
-        const propTypes = components[key].propTypes;
-        let options: React.ReactNode[] = [];
+        const propSettings = createProperties(props, components[key], addToSandbox);
 
-        if (propTypes) {
-            for (const [k, v] of Object.entries(propTypes)) {
-                if (Array.isArray(v)) {
-                    const onChange = (evt) => {
-                        const element = React.createElement(
-                            components[key].component,
-                            { ...props, [k]: evt.target.value },
-                            props.children
-                        );
-                        addToSandbox(id, element);
-                    };
-                    const settingsId = `${k}-settings`;
-                    options.push(
-                        <div key={settingsId}>
-                            <label htmlFor={settingsId}>{k}</label>
-                            <select id={settingsId} onChange={onChange} value={props[k]}>
-                                {v.map(e => <option key={e} value={e}>{e}</option>)}
-                            </select>
-                        </div>
-                    );
-                }
-            }
-        }
         return (
             <div>
                 <h2>{`${key} Settings`}</h2>
-                {options}
+                {propSettings}
+                <textarea cols={80} rows={15} value={json} readOnly />
             </div>
         );
     }
     useEffect(() => {
+        setJson(exportToJSON(sandbox))
         if (focus) {
             setContent(createSettings());
         }
-    }, [focus, sandbox]);
+    }, [focus, sandbox, json]);
 
     return (
         <div className="Settings" onDrop={drop} onDragOver={dragOver} onDragLeave={dragLeave}>
