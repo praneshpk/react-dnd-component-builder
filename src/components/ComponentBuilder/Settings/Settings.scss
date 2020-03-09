@@ -1,9 +1,17 @@
 .Settings {
     background: lightblue;
-    height: 180px;
+    min-height: 180px;
     flex-grow: 1;
     .content {
         text-transform: uppercase;
         padding: 1rem 10rem;
+    }
+    textarea {
+        resize: none;
+        background-color: #000;
+        color: #fff;
+        font-size: 13px;
+        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+          monospace;
     }
 }
