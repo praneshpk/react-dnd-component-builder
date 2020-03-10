@@ -40,4 +40,12 @@
         }
 
     }
+    textarea {
+        resize: none;
+        background-color: #000;
+        color: #fff;
+        font-size: 13px;
+        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+          monospace;
+    }
 }
