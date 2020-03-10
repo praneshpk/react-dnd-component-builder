@@ -5,5 +5,14 @@
     background: palevioletred;
     height: 100%;
     flex-direction: column;
-    padding: 50px;
+    padding: 1rem;
+    width: 180px;
+
+    .ComponentWrapper {
+        background: pink;
+        color: #696969;
+        padding: .5rem 1rem;
+        margin: .25rem 0;
+        font-weight: bold;
+    }
 }

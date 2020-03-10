@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createProperties, exportToJSON } from './Util';
 import './Settings.scss';
 
@@ -7,6 +7,7 @@ export default function Settings({
 }) {
     const [content, setContent] = useState(<h2>Settings panel</h2>);
     const [json, setJson] = useState('Click export to see JSON code');
+    const code = useRef<HTMLTextAreaElement>(null);
 
     function drop() {
         const { [focus]: value, ...newSandbox } = sandbox;
@@ -31,9 +32,22 @@ export default function Settings({
 
         return (
             <div>
-                <h2>{`${key} Settings`}</h2>
-                {propSettings}
-                <textarea cols={80} rows={15} value={json} readOnly />
+                <h2>{key}</h2>
+                <div className="flex row space">
+                    <div className="flex col">
+                        <h3>Properties</h3>
+                        <div className="grid">{propSettings}</div>
+                    </div>
+                    <div className="flex col">
+                        <h3>Embed</h3>
+                        <button onClick={() => {
+                            code.current?.select();
+                            document.execCommand('copy');
+                            document.getSelection()?.removeAllRanges();
+                        }}>Copy to Clipboard</button>
+                        <textarea ref={code} cols={80} rows={15} value={json} readOnly />
+                    </div>
+                </div>
             </div>
         );
     }

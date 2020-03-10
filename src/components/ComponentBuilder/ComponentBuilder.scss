@@ -2,4 +2,11 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+
+    .flex {
+        display: flex;
+        &.row { flex-direction: row; }
+        &.col { flex-direction: column; }
+        &.space { justify-content: space-between; }
+    }
 }

@@ -11,8 +11,14 @@ export default function Library({ components }) {
     }
     return (
         <div className="Library" onDrop={drop}>
+            <h3>Components</h3>
             {Object.keys(components).map(e =>
-                <ComponentWrapper key={generateKey(e)}>{e}</ComponentWrapper>)
+                <ComponentWrapper
+                    key={generateKey(e)}
+                    drop={false}
+                >
+                    {e}
+                </ComponentWrapper>)
             }
         </div>
     )

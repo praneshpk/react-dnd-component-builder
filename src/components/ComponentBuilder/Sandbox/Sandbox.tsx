@@ -8,20 +8,16 @@ export interface Props {
     addToSandbox: (id: string, element: React.ReactNode) => void,
 }
 export default function Sandbox({ components, children = {}, addToSandbox }: Props) {
-    const [mask, setMask] = useState(false);
     function dragOver(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        setMask(true);
     }
 
     function dragLeave(evt) {
-        setMask(false);
     }
 
     function drop(evt) {
         evt.preventDefault();
-        setMask(false);
         const key = evt.dataTransfer.getData('component');
 
         if (key) {
@@ -43,7 +39,7 @@ export default function Sandbox({ components, children = {}, addToSandbox }: Pro
 
     }
     return (
-        <div className={`Sandbox ${mask ? 'mask' : ''}`} onDragOver={dragOver} onDragLeave={dragLeave} onDrop={drop}>
+        <div className='Sandbox' onDragOver={dragOver} onDragLeave={dragLeave} onDrop={drop}>
             <div className="content">
                 {Object.values(children)}
             </div>

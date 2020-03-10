@@ -1,4 +1,4 @@
-import React, { useState, Children } from 'react';
+import React, { useState, useRef } from 'react';
 import Library from './Library/Library';
 import { ComponentWrapper } from './Library/ComponentWrapper/ComponentWrapper';
 import Sandbox from './Sandbox/Sandbox';
@@ -36,7 +36,10 @@ export default function ComponentBuilder() {
     };
     const addToSandbox = (id, element) => {
         const component = (
-            <ComponentWrapper key={id} onClick={() => { setFocus(id); }}>
+            <ComponentWrapper
+                key={id}
+                onClick={() => { setFocus(id); }}
+            >
                 {element}
             </ComponentWrapper>
         );
@@ -45,7 +48,9 @@ export default function ComponentBuilder() {
     };
     return (
         <div className="ComponentBuilder">
-            <Library components={components} />
+            <Library
+                components={components}
+            />
             <Sandbox
                 components={components}
                 addToSandbox={addToSandbox}

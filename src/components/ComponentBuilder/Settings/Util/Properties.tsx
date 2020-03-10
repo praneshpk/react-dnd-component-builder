@@ -17,12 +17,12 @@ export default function createProperties(props, component, addToSandbox) {
                 };
                 const settingsId = `${k}-settings`;
                 options.push(
-                    <div key={settingsId}>
+                    <React.Fragment>
                         <label htmlFor={settingsId}>{k}</label>
                         <select id={settingsId} onChange={onChange} value={props[k]}>
                             {v.map(e => <option key={e} value={e}>{e}</option>)}
                         </select>
-                    </div>
+                    </React.Fragment>
                 );
             }
         }
