@@ -9,4 +9,12 @@
         &.col { flex-direction: column; }
         &.space { justify-content: space-between; }
     }
+    $sizes: 12, 24, 48;
+    @each $size in $sizes {
+        .Grid-#{$size} {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, #{$size}px);
+            //grid-template-rows: repeat($size, #{$size}fr);
+        }
+    }
 }

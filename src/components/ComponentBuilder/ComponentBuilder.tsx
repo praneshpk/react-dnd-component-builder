@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Library from './Library/Library';
-import { ComponentWrapper } from './Library/ComponentWrapper/ComponentWrapper';
+import { ComponentWrapper, GridElement } from './Library/ComponentWrapper/ComponentWrapper';
 import Sandbox from './Sandbox/Sandbox';
 import Settings from './Settings/Settings';
 import { Button, Card, Badge } from '@material-ui/core';
@@ -10,35 +10,47 @@ export default function ComponentBuilder() {
     const [sandbox, setSandbox] = useState<object>({});
     const [focus, setFocus] = useState();
 
+    const defaultGrid = {
+        __grid__: {
+            x: 1,
+            y: 1,
+            w: 8,
+            h: 2,
+        } as GridElement
+    };
     const components = {
         'Button': {
             component: Button,
             props: {
                 variant: 'contained',
-                color: 'primary'
+                color: 'primary',
+                ...defaultGrid,
             },
             propTypes: {
                 variant: ['text', 'outlined', 'contained'],
                 size: ['small', 'medium', 'large']
             },
-            children: ['Button Component']
+            children: ['Button Component'],
+
         },
         'Card': {
             component: Card,
-            props: {},
-            children: ['Card Component']
+            props: defaultGrid,
+            children: ['Card Component'],
         },
         'Badge': {
             component: Badge,
-            props: {},
+            props: defaultGrid,
             children: ['Badge Component']
         }
     };
-    const addToSandbox = (id, element) => {
+    const addToSandbox = (id, element, grid: GridElement) => {
         const component = (
             <ComponentWrapper
+                grid={grid}
                 key={id}
                 onClick={() => { setFocus(id); }}
+                draggable={true}
             >
                 {element}
             </ComponentWrapper>
@@ -52,6 +64,7 @@ export default function ComponentBuilder() {
                 components={components}
             />
             <Sandbox
+                gridSize={48}
                 components={components}
                 addToSandbox={addToSandbox}
             >

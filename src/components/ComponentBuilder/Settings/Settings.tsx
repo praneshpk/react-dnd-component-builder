@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createProperties, exportToJSON } from './Util';
+import { createProperties, exportSandboxToJSON } from './Util';
 import './Settings.scss';
 
 export default function Settings({
@@ -52,7 +52,7 @@ export default function Settings({
         );
     }
     useEffect(() => {
-        setJson(exportToJSON(sandbox))
+        setJson(exportSandboxToJSON(sandbox));
         if (focus) {
             setContent(createSettings());
         }

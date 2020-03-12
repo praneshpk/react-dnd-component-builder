@@ -16,6 +16,7 @@ export default function Library({ components }) {
                 <ComponentWrapper
                     key={generateKey(e)}
                     drop={false}
+                    draggable={true}
                 >
                     {e}
                 </ComponentWrapper>)
