@@ -2,9 +2,11 @@ import React from 'react';
 import './Library.scss';
 import { ComponentWrapper } from './ComponentWrapper/ComponentWrapper';
 
-export const generateKey = prefix => `${prefix}_${Date.now()}`;
+export const generateKey = prefix => `${prefix}__${Date.now()}`;
 
-export default function Library({ components }) {
+export const parseKey = key => key.split('__');
+
+export default function Library({ components, grid }) {
     function drop(evt) {
         evt.preventDefault();
         console.log(evt);
@@ -17,7 +19,7 @@ export default function Library({ components }) {
                     key={generateKey(e)}
                     drop={false}
                     draggable={true}
-                >
+                    onClick={() => grid.current = components[e].props.__grid__}>
                     {e}
                 </ComponentWrapper>)
             }

@@ -1,4 +1,5 @@
 .ComponentWrapper {
+    background: rgba(200,200,200, 0.5);
     &.droppable {
         position: relative;
         background: white;
@@ -20,5 +21,14 @@
     }
     &.dragging {
         opacity: 0.5;
+    }
+    &.drop {
+        background: green;
+    }
+    &.error {
+        background: red;
+    }
+    &.child {
+        background: yellow;
     }
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { exportToJSON } from '../../Settings/Util';
 
 import './ComponentWrapper.scss';
 export interface GridElement {
@@ -13,12 +12,12 @@ export interface ComponentWrapperProps {
     grid?: GridElement,
     onClick?: () => void,
     drop?: boolean,
-    draggable?: boolean
+    draggable?: boolean,
+    className?: string[]
 }
 export function ComponentWrapper({
-    children, grid, onClick = () => { }, drop = true, draggable = false
+    children, grid, onClick = () => { }, drop = true, draggable = false, className
 }: ComponentWrapperProps) {
-    const [droppable, setDroppable] = useState(false);
     const [dragging, setDragging] = useState(false);
 
     function dragStart(evt) {
@@ -30,8 +29,9 @@ export function ComponentWrapper({
             evt.dataTransfer.setData('component', children.props.id);
         }
     }
-    let enterTarget: any = null;
-    let classList = (droppable ? ' droppable' : '') + (dragging ? ' dragging' : '');
+    let classList =
+        (dragging ? ' dragging' : '') +
+        (className ? ` ${className.join(' ')}` : '');
     return (
         <div className={`ComponentWrapper${classList}`}
             style={grid ? {
@@ -59,7 +59,7 @@ export function ComponentWrapper({
             //         setDroppable(false);
             //     }
             // }}
-            onDrop={(evt) => setDroppable(false)}
+            // onDrop={(evt) => setDroppable(false)}
             onClick={onClick}
             onDragEnd={(evt) => setDragging(false)}
         >

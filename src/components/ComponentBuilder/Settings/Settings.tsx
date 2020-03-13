@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createProperties, exportSandboxToJSON } from './Util';
 import './Settings.scss';
+import { parseKey } from '../Library/Library';
 
 export default function Settings({
     components, sandbox, setSandbox, addToSandbox, focus, setFocus
@@ -25,9 +26,10 @@ export default function Settings({
 
     }
     function createSettings() {
-        const props = sandbox[focus].props.children.props;
+        const wrapper = sandbox[focus].props.children;
+        const props = wrapper.props;
         const { id } = props;
-        const key = id.split('_')[0];
+        const key = parseKey(id)[0];
         const propSettings = createProperties(props, components[key], addToSandbox);
 
         return (

@@ -17,7 +17,7 @@ export default function createProperties(props, component, addToSandbox) {
                 };
                 const settingsId = `${k}-settings`;
                 options.push(
-                    <React.Fragment>
+                    <React.Fragment key={settingsId}>
                         <label htmlFor={settingsId}>{k}</label>
                         <select id={settingsId} onChange={onChange} value={props[k]}>
                             {v.map(e => <option key={e} value={e}>{e}</option>)}

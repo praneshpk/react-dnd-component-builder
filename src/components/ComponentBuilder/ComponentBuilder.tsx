@@ -7,9 +7,6 @@ import { Button, Card, Badge } from '@material-ui/core';
 import './ComponentBuilder.scss';
 
 export default function ComponentBuilder() {
-    const [sandbox, setSandbox] = useState<object>({});
-    const [focus, setFocus] = useState();
-
     const defaultGrid = {
         __grid__: {
             x: 1,
@@ -18,6 +15,11 @@ export default function ComponentBuilder() {
             h: 2,
         } as GridElement
     };
+
+    const [sandbox, setSandbox] = useState<object>({});
+    const [focus, setFocus] = useState();
+    const currentGridElement = useRef(defaultGrid.__grid__);
+
     const components = {
         'Button': {
             component: Button,
@@ -62,11 +64,13 @@ export default function ComponentBuilder() {
         <div className="ComponentBuilder">
             <Library
                 components={components}
+                grid={currentGridElement}
             />
             <Sandbox
                 gridSize={48}
                 components={components}
                 addToSandbox={addToSandbox}
+                grid={currentGridElement}
             >
                 {sandbox}
             </Sandbox>
