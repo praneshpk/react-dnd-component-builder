@@ -41,13 +41,17 @@ export default function Sandbox({
         evt.stopPropagation();
         evt.preventDefault();
         if (content.current) {
-            let children = Array.from(content.current.children);
-            let index = children.indexOf(evt.target);
+            const children = Array.from(content.current.children);
+            const index = children.indexOf(evt.target);
 
             const checkGrid = (dropState) => {
                 for (let y = 0; y < grid.current.h; y++) {
                     for (let x = 0; x < grid.current.w; x++) {
-                        const element = children[index + (x + y * Math.floor(contentWidth / gridSize))] as HTMLElement;
+                        let i = index + (x + y * contentWidth);
+                        if (i > children.length - 1) {
+                            return dropState;
+                        }
+                        const element = children[i] as HTMLElement;
                         switch (dropState) {
                             case DROP.OK:
                                 element.classList.add('drop');
@@ -62,30 +66,36 @@ export default function Sandbox({
                                 console.log(dropState);
                                 break;
                         }
+                        // if (dropState === DROP.ERR && (index + x + 1) % contentWidth === 0) {
+                        //     break;
+                        // }
                     }
                 }
                 return dropState;
             }
-
-            for (let y = 0; y < grid.current.h; y++) {
-                for (let x = 0; x < grid.current.w; x++) {
-                    const element = children[index + (x + y * Math.floor(contentWidth / gridSize))] as HTMLElement;
-                    if (!element) {
-                        dropState = DROP.ERR;
-                        resetClassState(content.current);
-                        return;
-                    } else if (element.classList.contains('placeholder')) {
-                        if (element.style.visibility === 'hidden') {
-                            dropState = checkGrid(DROP.ERR);
+            if ((index % contentWidth + grid.current.w) > contentWidth) {
+                dropState = checkGrid(DROP.ERR);
+            } else {
+                for (let y = 0; y < grid.current.h; y++) {
+                    for (let x = 0; x < grid.current.w; x++) {
+                        const element = children[index + (x + y * contentWidth)] as HTMLElement;
+                        if (!element) {
+                            dropState = DROP.ERR;
+                            resetClassState(content.current);
+                            return;
+                        } else if (element.classList.contains('placeholder')) {
+                            if (element.style.visibility === 'hidden') {
+                                dropState = checkGrid(DROP.ERR);
+                                return;
+                            }
+                        } else if (element.classList.contains('ComponentWrapper')) {
+                            dropState = checkGrid(DROP.CHILD);
                             return;
                         }
-                    } else if (element.classList.contains('ComponentWrapper')) {
-                        dropState = checkGrid(DROP.CHILD);
-                        return;
                     }
                 }
+                dropState = checkGrid(DROP.OK);
             }
-            dropState = checkGrid(DROP.OK);
         }
     }
 
@@ -122,7 +132,7 @@ export default function Sandbox({
                     let index = children.indexOf(evt.target);
                     for (let y = 0; y < __grid__.h; y++) {
                         for (let x = 0; x < __grid__.w; x++) {
-                            const child = children[index + (x + y * Math.floor(contentWidth / gridSize))] as HTMLElement;
+                            const child = children[index + (x + y * contentWidth)] as HTMLElement;
                             if (child) {
                                 child.style.visibility = "hidden";// .remove();
                             }
@@ -138,16 +148,13 @@ export default function Sandbox({
     }
     useLayoutEffect(() => {
         if (content.current) {
-            setContentWidth(parseInt(window.getComputedStyle(content.current).width));
-            setContentHeight(parseInt(window.getComputedStyle(content.current).height));
-            // console.log(Math.floor(contentWidth / gridSize));
+            setContentWidth(Math.floor(parseInt(window.getComputedStyle(content.current).width) / gridSize));
+            setContentHeight(Math.floor(parseInt(window.getComputedStyle(content.current).height) / gridSize));
         }
         if (contentWidth > 0) {
-            let width = Math.floor(contentWidth / gridSize);
-            let height = Math.floor(contentHeight / gridSize);
-            let len = width * height;
+            let len = contentWidth * contentHeight;
             setPlaceholders(Array(len).fill(0).map((e, i) => {
-                const newGrid = { x: (i % width) + 1, y: Math.floor(i / width) + 1, w: 1, h: 1 };
+                const newGrid = { x: (i % contentWidth) + 1, y: Math.floor(i / contentWidth) + 1, w: 1, h: 1 };
                 return (
                     <ComponentWrapper
                         key={`placeholder-${i}`}
