@@ -46,10 +46,10 @@ export default function ComponentBuilder() {
             children: ['Badge Component']
         }
     };
-    const addToSandbox = (id, element, grid: GridElement) => {
+    const addToSandbox = (id, element) => {
         const component = (
             <ComponentWrapper
-                grid={grid}
+                grid={element.props.grid}
                 key={id}
                 onClick={() => { setFocus(id); }}
                 draggable={true}
@@ -57,7 +57,7 @@ export default function ComponentBuilder() {
                 {element}
             </ComponentWrapper>
         );
-        setSandbox({ ...sandbox, [id]: component });
+        setSandbox(sandbox => ({ ...sandbox, [id]: component }));
         setFocus(id);
     };
     return (

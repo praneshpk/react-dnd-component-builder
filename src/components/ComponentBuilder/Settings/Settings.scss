@@ -48,4 +48,10 @@
         font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
           monospace;
     }
+    .dirty {
+        font-style: italic;
+    }
+    .error {
+        color: red;
+    }
 }

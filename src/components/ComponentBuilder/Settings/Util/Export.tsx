@@ -3,7 +3,7 @@ import { parseKey } from "../../Library/Library";
 function getChildren(root, key) {
     const grid = root.props.grid;
     const wrapper = root.props.children;
-    if (!wrapper) {
+    if (!wrapper || Array.isArray(wrapper)) {
         return {
             [key]: {
                 props: root.props,

@@ -7,7 +7,7 @@ import { ComponentWrapper, GridElement } from '../Library/ComponentWrapper/Compo
 export interface Props {
     components: object,
     children?: object,
-    addToSandbox: (id: string, element: React.ReactNode, grid: GridElement) => void,
+    addToSandbox: (id: string, element: React.ReactNode) => void,
     gridSize: 12 | 24 | 48,
     grid: MutableRefObject<GridElement>,
 }
@@ -24,6 +24,7 @@ export default function Sandbox({
     const [contentWidth, setContentWidth] = useState(0);
     const [contentHeight, setContentHeight] = useState(0);
     const [placeholders, setPlaceholders] = useState<any[]>([]);
+    const useGrid = useRef<any[]>([]);
 
     const content = useRef<HTMLDivElement>(null);
 
@@ -79,19 +80,23 @@ export default function Sandbox({
                 for (let y = 0; y < grid.current.h; y++) {
                     for (let x = 0; x < grid.current.w; x++) {
                         const element = children[index + (x + y * contentWidth)] as HTMLElement;
+                        console.log(useGrid.current, useGrid.current[index + (x + y * contentWidth)]);
                         if (!element) {
                             dropState = DROP.ERR;
                             resetClassState(content.current);
                             return;
-                        } else if (element.classList.contains('placeholder')) {
-                            if (element.style.visibility === 'hidden') {
-                                dropState = checkGrid(DROP.ERR);
-                                return;
-                            }
-                        } else if (element.classList.contains('ComponentWrapper')) {
-                            dropState = checkGrid(DROP.CHILD);
+                        } else if (useGrid.current[index + (x + y * contentWidth)]) {
+                            dropState = checkGrid(DROP.ERR);
                             return;
+                            // if (element.style.visibility === 'hidden') {
+                            //     dropState = checkGrid(DROP.ERR);
+                            //     return;
+                            // }
                         }
+                        // else if (element.classList.contains('ComponentWrapper')) {
+                        //     dropState = checkGrid(DROP.CHILD);
+                        //     return;
+                        // }
                     }
                 }
                 dropState = checkGrid(DROP.OK);
@@ -128,20 +133,22 @@ export default function Sandbox({
                 // remove placeholders
                 if (content.current) {
                     let children = Array.from(content.current.children);
-                    //let e = evt.target;
                     let index = children.indexOf(evt.target);
                     for (let y = 0; y < __grid__.h; y++) {
                         for (let x = 0; x < __grid__.w; x++) {
-                            const child = children[index + (x + y * contentWidth)] as HTMLElement;
-                            if (child) {
-                                child.style.visibility = "hidden";// .remove();
-                            }
+                            useGrid.current[index + (x + y * contentWidth)] = true;
+                            // const child = children[index + (x + y * contentWidth)] as HTMLElement;
+                            // if (child) {
+
+                            //     child.style.visibility = "hidden";// .remove();
+                            // }
                         }
                     }
+                    console.log(useGrid.current);
                 }
                 const targetGrid = JSON.parse(evt.target.dataset.grid);
-                const element = React.createElement(el.component, { ...props, id, key: id }, el.children);
-                addToSandbox(id, element, { ...__grid__, x: targetGrid.x, y: targetGrid.y });
+                const element = React.createElement(el.component, { ...props, id, key: id, grid: { ...__grid__, x: targetGrid.x, y: targetGrid.y } }, el.children);
+                addToSandbox(id, element);
             }
         }
 
@@ -153,6 +160,10 @@ export default function Sandbox({
         }
         if (contentWidth > 0) {
             let len = contentWidth * contentHeight;
+            // if (content.current) {
+            //     console.log(content.current.children.indexOf());
+            // }
+            useGrid.current = Array(len).fill(false);
             setPlaceholders(Array(len).fill(0).map((e, i) => {
                 const newGrid = { x: (i % contentWidth) + 1, y: Math.floor(i / contentWidth) + 1, w: 1, h: 1 };
                 return (

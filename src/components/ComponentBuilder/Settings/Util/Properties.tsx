@@ -8,6 +8,7 @@ export default function createProperties(props, component, addToSandbox) {
         for (const [k, v] of Object.entries(component.propTypes)) {
             if (Array.isArray(v)) {
                 const onChange = (evt) => {
+                    console.log(props);
                     const element = React.createElement(
                         component.component,
                         { ...props, [k]: evt.target.value },
